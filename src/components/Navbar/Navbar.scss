@@ -1,0 +1,55 @@
+.navbar {
+	height: 100px;
+	background-color: #fdfdfd;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	border-radius: 0 0 10px 10px;
+	.navbar-container {
+		height: 100px;
+		max-width: 1100px;
+		padding: 0 24px;
+		width: 100%;
+		background-color: #fdfdfd;
+
+		.desktop-navigation {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			// @media screen and (max-width: 1000px) {
+			// 	display: none;
+			// }
+			.buttons {
+				display: flex;
+				gap: 20px;
+			}
+		}
+
+		.mobile-navigation {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			@media screen and (min-width: 1000px) {
+				display: none;
+			}
+			.mobile-hamburger {
+				cursor: pointer;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				left: 1.5rem;
+				margin-top: 1px;
+			}
+			.cityq-logo {
+				margin-top: 6px;
+			}
+		}
+	}
+}
