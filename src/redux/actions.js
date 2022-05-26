@@ -8,7 +8,10 @@ export const setLoggedUser = (payload) => ({
 	payload,
 });
 
-export const setLanguage = (payload) => ({
-	type: 'setLanguage',
-	payload,
-});
+export const setLanguage = (payload) => {
+	localStorage.setItem('language', payload);
+	return {
+		type: 'setLanguage',
+		payload,
+	};
+};

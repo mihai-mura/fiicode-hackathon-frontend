@@ -3,7 +3,6 @@ import { Modal, TextInput, Button, PasswordInput, LoadingOverlay, NativeSelect }
 import { MdAlternateEmail } from 'react-icons/md';
 import { CgRename, CgPassword } from 'react-icons/cg';
 import { FaRegAddressCard } from 'react-icons/fa';
-import { IconBuilding } from '@tabler/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeModalState, setLoggedUser } from '../../../redux/actions';
 import { useEffect, useState } from 'react';
@@ -23,26 +22,19 @@ const Authentification = () => {
 	const [registerEmail, setRegisterEmail] = useState('');
 	const [registerPassword, setRegisterPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
-	const [address, setAddress] = useState('');
 	const [loginEmail, setLoginEmail] = useState('');
 	const [loginPassword, setLoginPassword] = useState('');
-	const [city, setCity] = useState('');
 	//errors
 	const [firstNameError, setFirstNameError] = useState(false);
 	const [lastNameError, setLastNameError] = useState(false);
 	const [registerEmailError, setRegisterEmailError] = useState(false);
-	const [addressError, setAddressError] = useState(false);
 	const [loginEmailError, setLoginEmailError] = useState(false);
 	const [registerPasswordError, setRegisterPasswordError] = useState(false);
 	const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 	const [loginPasswordError, setLoginPasswordError] = useState(false);
-	const [cityError, setCityError] = useState(false);
-	const [noFileError, setNoFileError] = useState(false);
 
 	//overlay
 	const [loadingOverlay, setLoadingOverlay] = useState(false);
-
-	const [inputFile, setInputFile] = useState(null);
 
 	//stop overlay
 	useEffect(() => {
@@ -52,7 +44,6 @@ const Authentification = () => {
 	}, [modals]);
 
 	//handle enter key
-	//! switching forms too slow
 	useEffect(() => {
 		const listener = (event) => {
 			if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -77,10 +68,8 @@ const Authentification = () => {
 		registerEmail,
 		registerPassword,
 		confirmPassword,
-		address,
 		loginEmail,
 		loginPassword,
-		city,
 	]);
 
 	const handleRegister = async () => {
@@ -96,9 +85,6 @@ const Authentification = () => {
 			setConfirmPasswordError(LANGUAGE.register_modal_confirm_password_error[selectedLanguage]);
 		}
 		//empty fields verification
-		if (inputFile === null) {
-			setNoFileError(true);
-		}
 		if (firstName === '') {
 			setFirstNameError(LANGUAGE.register_modal_first_name_error[selectedLanguage]);
 		}
@@ -114,12 +100,6 @@ const Authentification = () => {
 		if (confirmPassword === '') {
 			setConfirmPasswordError(true);
 		}
-		if (address === '') {
-			setAddressError(LANGUAGE.register_modal_address_error[selectedLanguage]);
-		}
-		if (city === '' || city === 'City') {
-			setCityError(LANGUAGE.register_modal_city_error[selectedLanguage]);
-		}
 
 		if (
 			firstName !== '' &&
@@ -127,13 +107,10 @@ const Authentification = () => {
 			registerEmail !== '' &&
 			registerPassword !== '' &&
 			confirmPassword !== '' &&
-			address !== '' &&
 			registerEmail.indexOf('@') !== -1 &&
 			registerEmail.lastIndexOf('.') > registerEmail.indexOf('@') &&
-			city !== '' &&
 			registerPassword.length >= 8 &&
-			registerPassword === confirmPassword &&
-			inputFile !== null
+			registerPassword === confirmPassword
 		) {
 			//togle overlay
 			setLoadingOverlay(true);
@@ -145,16 +122,27 @@ const Authentification = () => {
 					},
 					body: JSON.stringify({
 						email: registerEmail,
-						city: city,
 						firstName: firstName,
 						lastName: lastName,
-						address: address,
 						password: registerPassword,
 					}),
 				});
 				if (res?.status === 201) {
 					const response = await res.json();
 					localStorage.setItem('api-token', response.token);
+					dispatch(changeModalState('register', false));
+					dispatch(setLoggedUser(response.user));
+					setFirstName('');
+					setLastName('');
+					setRegisterEmail('');
+					setRegisterPassword('');
+					setConfirmPassword('');
+					setLoadingOverlay(false);
+				} else if (res.status === 409) {
+					setLoadingOverlay(false);
+					setRegisterEmailError(LANGUAGE.register_modal_email_already_exists[selectedLanguage]);
+				} else {
+					showNotification(errorNotification());
 				}
 			} catch (error) {
 				console.error(error);
@@ -359,19 +347,13 @@ const Authentification = () => {
 					setFirstName('');
 					setLastName('');
 					setRegisterEmail('');
-					setCity('');
 					setRegisterPassword('');
 					setConfirmPassword('');
-					setAddress('');
-					setInputFile(null);
 					setRegisterEmailError(false);
-					setCityError(false);
 					setRegisterPasswordError(false);
 					setConfirmPasswordError(false);
-					setAddressError(false);
 					setFirstNameError(false);
 					setLastNameError(false);
-					setNoFileError(false);
 				}}
 				title={LANGUAGE.register_modal_title[selectedLanguage]}>
 				<div style={{ width: '100%', position: 'relative' }}>
@@ -447,20 +429,7 @@ const Authentification = () => {
 						}}
 						error={confirmPasswordError}
 					/>
-					<TextInput
-						className='auth-input'
-						icon={<FaRegAddressCard />}
-						variant='filled'
-						placeholder={LANGUAGE.register_modal_address[selectedLanguage]}
-						radius='md'
-						value={address}
-						onChange={(e) => {
-							setAddress(e.target.value);
-							setAddressError(false);
-						}}
-						error={addressError}
-					/>
-					<p>{LANGUAGE.register_modal_add_id_pic_title[selectedLanguage]}</p>
+
 					<div className='auth-footer'>
 						<div>
 							<p>{LANGUAGE.register_modal_already_have_account[selectedLanguage]}</p>
@@ -476,19 +445,13 @@ const Authentification = () => {
 									setFirstName('');
 									setLastName('');
 									setRegisterEmail('');
-									setCity('');
 									setRegisterPassword('');
 									setConfirmPassword('');
-									setAddress('');
-									setInputFile(null);
 									setRegisterEmailError(false);
-									setCityError(false);
 									setRegisterPasswordError(false);
 									setConfirmPasswordError(false);
-									setAddressError(false);
 									setFirstNameError(false);
 									setLastNameError(false);
-									setNoFileError(false);
 								}}>
 								{LANGUAGE.register_modal_go_to_login[selectedLanguage]}
 							</Button>
