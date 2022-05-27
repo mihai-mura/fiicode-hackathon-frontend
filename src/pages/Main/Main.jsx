@@ -71,11 +71,10 @@ export default function Main() {
 							key={marker.time.toISOString()}
 							position={{ lat: marker.lat, lng: marker.lng }}
 							onRightClick={() =>
-								setMarkers((prev) => prev.filter((value) => value.lat != marker.lat && value.lng != marker.lng))
+								setMarkers((prev) => prev.filter((value) => value.lat !== marker.lat && value.lng !== marker.lng))
 							}
 							onClick={() => {
 								setSelected(marker);
-								// setMap(null);
 							}}
 						/>
 					))}
