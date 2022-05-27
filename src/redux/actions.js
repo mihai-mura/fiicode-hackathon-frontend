@@ -7,11 +7,3 @@ export const setLoggedUser = (payload) => ({
 	type: 'setLoggedUser',
 	payload,
 });
-
-export const setLanguage = (payload) => {
-	localStorage.setItem('language', payload);
-	return {
-		type: 'setLanguage',
-		payload,
-	};
-};

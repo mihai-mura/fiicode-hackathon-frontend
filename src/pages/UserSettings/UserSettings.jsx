@@ -1,4 +1,3 @@
-import LANGUAGE from '../../utils/languages.json';
 import { useSelector } from 'react-redux';
 import './UserSettings.scss';
 import { Button, PasswordInput, TextInput } from '@mantine/core';
@@ -8,7 +7,6 @@ import { infoNotification, errorNotification } from '../../components/Notificati
 import ROLE from '../../utils/roles';
 
 const UserSettings = (props) => {
-	const selectedLanguage = useSelector((state) => state.language);
 	const loggedUser = useSelector((state) => state.loggedUser);
 
 	//fields
@@ -33,7 +31,7 @@ const UserSettings = (props) => {
 		//firstName
 		if (firstName !== loggedUser?.firstName) {
 			if (firstName === '') {
-				setFirstNameError(LANGUAGE.register_modal_first_name_error[selectedLanguage]);
+				setFirstNameError('First name is required');
 			} else {
 				const res = await fetch(`${process.env.REACT_APP_API_URL}/users/first-name`, {
 					method: 'PUT',
@@ -45,7 +43,7 @@ const UserSettings = (props) => {
 				});
 				if (res.status === 200) {
 					setFirstName(firstName.charAt(0).toUpperCase() + firstName.slice(1));
-					showNotification(infoNotification(LANGUAGE.notification_settings_first_name[selectedLanguage]));
+					showNotification(infoNotification('First name saved'));
 				} else {
 					showNotification(errorNotification());
 				}
@@ -54,7 +52,7 @@ const UserSettings = (props) => {
 		//lastName
 		if (lastName !== loggedUser?.lastName) {
 			if (lastName === '') {
-				setLastNameError(LANGUAGE.register_modal_last_name_error[selectedLanguage]);
+				setLastNameError('Last name is required');
 			} else {
 				const res = await fetch(`${process.env.REACT_APP_API_URL}/users/last-name`, {
 					method: 'PUT',
@@ -66,7 +64,7 @@ const UserSettings = (props) => {
 				});
 				if (res.status === 200) {
 					setLastName(lastName.charAt(0).toUpperCase() + lastName.slice(1));
-					showNotification(infoNotification(LANGUAGE.notification_settings_last_name[selectedLanguage]));
+					showNotification(infoNotification('Last name saved'));
 				} else {
 					showNotification(errorNotification());
 				}
@@ -75,10 +73,10 @@ const UserSettings = (props) => {
 		//password
 		if (password !== '') {
 			if (password.length < 8 && password.length > 0) {
-				setPasswordError(LANGUAGE.register_modal_invalid_password_format[selectedLanguage]);
+				setPasswordError('Password has less than 8 characters');
 			}
 			if (password !== confirmPassword) {
-				setConfirmPasswordError(LANGUAGE.register_modal_confirm_password_error[selectedLanguage]);
+				setConfirmPasswordError('Passwords do not match');
 			}
 			if (password !== '' && confirmPassword !== '' && password.length >= 8 && password === confirmPassword) {
 				const res = await fetch(`${process.env.REACT_APP_API_URL}/users/password`, {
@@ -92,7 +90,7 @@ const UserSettings = (props) => {
 				if (res.status === 200) {
 					setPassword('');
 					setConfirmPassword('');
-					showNotification(infoNotification(LANGUAGE.notification_settings_password[selectedLanguage]));
+					showNotification(infoNotification('Password saved'));
 				} else {
 					showNotification(errorNotification());
 				}
@@ -104,10 +102,7 @@ const UserSettings = (props) => {
 		<div className='settings-page'>
 			<div className='settings-top-container'>
 				<div className='settings-top'>
-					<h3 className='settings-head'>{LANGUAGE.settings_header[selectedLanguage]}</h3>
-					<p className='settings-top-text'>
-						{props.role === ROLE.USER && LANGUAGE.settings_top_text_user[selectedLanguage]}
-					</p>
+					<h3 className='settings-head'>Settings</h3>
 				</div>
 			</div>
 			<div className='settings-main-container'>
@@ -116,8 +111,8 @@ const UserSettings = (props) => {
 						<TextInput
 							className='settings-text-input'
 							radius='md'
-							label={LANGUAGE.register_modal_first_name[selectedLanguage]}
-							placeholder={LANGUAGE.register_modal_first_name[selectedLanguage]}
+							label='First name'
+							placeholder='First name'
 							value={firstName}
 							error={firstNameError}
 							onChange={(e) => {
@@ -128,8 +123,8 @@ const UserSettings = (props) => {
 						<TextInput
 							className='settings-text-input'
 							radius='md'
-							label={LANGUAGE.register_modal_last_name[selectedLanguage]}
-							placeholder={LANGUAGE.register_modal_last_name[selectedLanguage]}
+							label='Last name'
+							placeholder='Last name'
 							value={lastName}
 							error={lastNameError}
 							onChange={(e) => {
@@ -142,8 +137,8 @@ const UserSettings = (props) => {
 						<PasswordInput
 							className='settings-text-input'
 							radius='md'
-							label={LANGUAGE.settings_password_input[selectedLanguage]}
-							placeholder={LANGUAGE.settings_password_input[selectedLanguage]}
+							label='Password'
+							placeholder='Password'
 							value={password}
 							error={passwordError}
 							onChange={(e) => {
@@ -154,8 +149,8 @@ const UserSettings = (props) => {
 						<PasswordInput
 							className='settings-text-input'
 							radius='md'
-							label={LANGUAGE.settings_password_confirm_input[selectedLanguage]}
-							placeholder={LANGUAGE.settings_password_confirm_input[selectedLanguage]}
+							label='Confirm password'
+							placeholder='Confirm password'
 							value={confirmPassword}
 							error={confirmPasswordError}
 							onChange={(e) => {
@@ -167,7 +162,7 @@ const UserSettings = (props) => {
 
 					<div className='footer'>
 						<Button radius='xl' onClick={handleSave}>
-							{LANGUAGE.settings_page_save[selectedLanguage]}
+							Save
 						</Button>
 					</div>
 				</div>

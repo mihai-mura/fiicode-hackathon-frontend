@@ -6,7 +6,6 @@ import { FaRegAddressCard } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeModalState, setLoggedUser } from '../../../redux/actions';
 import { useEffect, useState } from 'react';
-import LANGUAGE from '../../../utils/languages.json';
 import { showNotification } from '@mantine/notifications';
 import { errorNotification, infoNotification } from '../../Notifications/Notifications';
 import ROLE from '../../../utils/roles';
@@ -14,7 +13,6 @@ import ROLE from '../../../utils/roles';
 const Authentification = () => {
 	const dispatch = useDispatch();
 	const modals = useSelector((state) => state.modals);
-	const selectedLanguage = useSelector((state) => state.language);
 
 	//inputs
 	const [firstName, setFirstName] = useState('');
@@ -75,27 +73,27 @@ const Authentification = () => {
 	const handleRegister = async () => {
 		//email format verification
 		if (registerEmail.indexOf('@') === -1 || registerEmail.lastIndexOf('.') < registerEmail.indexOf('@')) {
-			setRegisterEmailError(LANGUAGE.register_modal_invaid_email_format[selectedLanguage]);
+			setRegisterEmailError('Invalid email format');
 		}
 		//password format verification
 		if (registerPassword.length < 8 && registerPassword.length > 0) {
-			setRegisterPasswordError(LANGUAGE.register_modal_invalid_password_format[selectedLanguage]);
+			setRegisterPasswordError('Password has less than 8 characters');
 		}
 		if (registerPassword !== confirmPassword) {
-			setConfirmPasswordError(LANGUAGE.register_modal_confirm_password_error[selectedLanguage]);
+			setConfirmPasswordError('Passwords do not match');
 		}
 		//empty fields verification
 		if (firstName === '') {
-			setFirstNameError(LANGUAGE.register_modal_first_name_error[selectedLanguage]);
+			setFirstNameError('First name is required');
 		}
 		if (lastName === '') {
-			setLastNameError(LANGUAGE.register_modal_last_name_error[selectedLanguage]);
+			setLastNameError('Last name is required');
 		}
 		if (registerEmail === '') {
-			setRegisterEmailError(LANGUAGE.register_modal_email_error[selectedLanguage]);
+			setRegisterEmailError('Email is required');
 		}
 		if (registerPassword === '') {
-			setRegisterPasswordError(LANGUAGE.register_modal_password_error[selectedLanguage]);
+			setRegisterPasswordError('Password is required');
 		}
 		if (confirmPassword === '') {
 			setConfirmPasswordError(true);
@@ -140,18 +138,13 @@ const Authentification = () => {
 					setLoadingOverlay(false);
 				} else if (res.status === 409) {
 					setLoadingOverlay(false);
-					setRegisterEmailError(LANGUAGE.register_modal_email_already_exists[selectedLanguage]);
+					setRegisterEmailError('Email already in use');
 				} else {
 					showNotification(errorNotification());
 				}
 			} catch (error) {
 				console.error(error);
-				showNotification(
-					errorNotification(
-						LANGUAGE.notification_error_title[selectedLanguage],
-						LANGUAGE.notification_error_message[selectedLanguage]
-					)
-				);
+				showNotification(errorNotification('Something went wrong', 'Please try again later'));
 				setLoadingOverlay(false);
 			}
 		}
@@ -159,18 +152,18 @@ const Authentification = () => {
 	const handleLogin = async () => {
 		//password format verification
 		if (loginPassword.length < 8 && loginPassword.length > 0) {
-			setLoginPasswordError(LANGUAGE.login_modal_password_too_short[selectedLanguage]);
+			setLoginPasswordError('Password invalid');
 		}
 		//email format verification
 		if (loginEmail.indexOf('@') === -1 || loginEmail.lastIndexOf('.') < loginEmail.indexOf('@')) {
-			setLoginEmailError(LANGUAGE.login_modal_invalid_email_format[selectedLanguage]);
+			setLoginEmailError('Invalid email format');
 		}
 		//empty fields verification
 		if (loginEmail === '') {
 			setLoginEmailError('Email is required');
 		}
 		if (loginPassword === '') {
-			setLoginPasswordError(LANGUAGE.login_modal_password_empty[selectedLanguage]);
+			setLoginPasswordError('Password required');
 		}
 
 		if (
@@ -202,19 +195,14 @@ const Authentification = () => {
 					setLoginPassword('');
 				} else if (res.status === 403) {
 					setLoadingOverlay(false);
-					setLoginPasswordError(LANGUAGE.login_modal_password_wrong[selectedLanguage]);
+					setLoginPasswordError('Wrong password');
 				} else if (res.status === 404) {
 					setLoadingOverlay(false);
-					setLoginEmailError(LANGUAGE.login_modal_email_not_found[selectedLanguage]);
+					setLoginEmailError('User not found');
 				}
 			} catch (error) {
 				console.error(error);
-				showNotification(
-					errorNotification(
-						LANGUAGE.notification_error_title[selectedLanguage],
-						LANGUAGE.notification_error_message[selectedLanguage]
-					)
-				);
+				showNotification(errorNotification('Something went wrong', 'Please try again later'));
 				setLoadingOverlay(false);
 			}
 		}
@@ -223,10 +211,10 @@ const Authentification = () => {
 	const handleForgotPassword = async () => {
 		//email format verification
 		if (loginEmail.indexOf('@') === -1 || loginEmail.lastIndexOf('.') < loginEmail.indexOf('@')) {
-			setLoginEmailError(LANGUAGE.login_modal_invalid_email_format[selectedLanguage]);
+			setLoginEmailError('Invalid email format');
 		}
 		if (loginEmail === '') {
-			setLoginEmailError(LANGUAGE.login_modal_email_empty[selectedLanguage]);
+			setLoginEmailError('Email is required');
 		}
 		if (loginEmail !== '' && loginEmail.indexOf('@') !== -1 && loginEmail.lastIndexOf('.') > loginEmail.indexOf('@')) {
 			//togle overlay
@@ -242,27 +230,16 @@ const Authentification = () => {
 					}),
 				});
 				if (res.status === 200) {
-					showNotification(
-						infoNotification(
-							LANGUAGE.notification_recovery_email_sent_title[selectedLanguage],
-							'green',
-							LANGUAGE.notification_recovery_email_sent_message[selectedLanguage]
-						)
-					);
+					showNotification(infoNotification('Email sent', 'green', 'Please check your email to reset your password'));
 					setLoginEmail('');
 					setLoadingOverlay(false);
 				} else if (res.status === 404) {
 					setLoadingOverlay(false);
-					setLoginEmailError(LANGUAGE.login_modal_email_not_found[selectedLanguage]);
+					setLoginEmailError('User not found');
 				}
 			} catch (error) {
 				console.error(error);
-				showNotification(
-					errorNotification(
-						LANGUAGE.notification_error_title[selectedLanguage],
-						LANGUAGE.notification_error_message[selectedLanguage]
-					)
-				);
+				showNotification(errorNotification('Something went wrong', 'Please try again later'));
 				setLoadingOverlay(false);
 			}
 		}
@@ -280,14 +257,14 @@ const Authentification = () => {
 					setLoginEmailError(false);
 					setLoginPasswordError(false);
 				}}
-				title={LANGUAGE.login_modal_title[selectedLanguage]}>
+				title='Login'>
 				<div style={{ width: '100%', position: 'relative' }}>
 					<LoadingOverlay visible={loadingOverlay} />
 					<TextInput
 						className='auth-input'
 						icon={<MdAlternateEmail />}
 						variant='filled'
-						placeholder={LANGUAGE.login_modal_email[selectedLanguage]}
+						placeholder='Your email'
 						radius='md'
 						value={loginEmail}
 						onChange={(e) => {
@@ -300,7 +277,7 @@ const Authentification = () => {
 						className='auth-input'
 						icon={<CgPassword />}
 						variant='filled'
-						placeholder={LANGUAGE.login_modal_password[selectedLanguage]}
+						placeholder='Your password'
 						radius='md'
 						value={loginPassword}
 						onChange={(e) => {
@@ -310,11 +287,11 @@ const Authentification = () => {
 						error={loginPasswordError}
 					/>
 					<Button variant='subtle' radius='lg' size='xs' color='orange' compact onClick={handleForgotPassword}>
-						{LANGUAGE.login_modal_forgot_password[selectedLanguage]}
+						Forgot password?
 					</Button>
 					<div className='auth-footer'>
 						<div>
-							<p>{LANGUAGE.login_modal_no_account[selectedLanguage]}</p>
+							<p>Don't have an account?</p>
 							<Button
 								size='xs'
 								variant='subtle'
@@ -329,11 +306,11 @@ const Authentification = () => {
 									setLoginEmailError(false);
 									setLoginPasswordError(false);
 								}}>
-								{LANGUAGE.login_modal_go_to_register[selectedLanguage]}
+								Register here
 							</Button>
 						</div>
 						<Button variant='gradient' gradient={{ from: 'orange', to: 'red' }} radius='xl' onClick={handleLogin}>
-							{LANGUAGE.login_modal_submit[selectedLanguage]}
+							Login
 						</Button>
 					</div>
 				</div>
@@ -355,7 +332,7 @@ const Authentification = () => {
 					setFirstNameError(false);
 					setLastNameError(false);
 				}}
-				title={LANGUAGE.register_modal_title[selectedLanguage]}>
+				title='Register'>
 				<div style={{ width: '100%', position: 'relative' }}>
 					<LoadingOverlay visible={loadingOverlay} />
 					<div className='register-field-row'>
@@ -363,7 +340,7 @@ const Authentification = () => {
 							className='auth-input'
 							icon={<CgRename />}
 							variant='filled'
-							placeholder={LANGUAGE.register_modal_first_name[selectedLanguage]}
+							placeholder='First name'
 							radius='md'
 							value={firstName}
 							onChange={(e) => {
@@ -376,7 +353,7 @@ const Authentification = () => {
 							className='auth-input'
 							icon={<CgRename />}
 							variant='filled'
-							placeholder={LANGUAGE.register_modal_last_name[selectedLanguage]}
+							placeholder='Last name'
 							radius='md'
 							value={lastName}
 							onChange={(e) => {
@@ -391,7 +368,7 @@ const Authentification = () => {
 							className='auth-input'
 							icon={<MdAlternateEmail />}
 							variant='filled'
-							placeholder={LANGUAGE.register_modal_email[selectedLanguage]}
+							placeholder='Email'
 							radius='md'
 							type={'email'}
 							value={registerEmail}
@@ -406,8 +383,8 @@ const Authentification = () => {
 						className='auth-input'
 						icon={<CgPassword />}
 						variant='filled'
-						placeholder={LANGUAGE.register_modal_password[selectedLanguage]}
-						description={LANGUAGE.register_modal_password_description[selectedLanguage]}
+						placeholder='Your password'
+						description='Password must be at least 8 characters long'
 						radius='md'
 						value={registerPassword}
 						onChange={(e) => {
@@ -420,7 +397,7 @@ const Authentification = () => {
 						className='auth-input'
 						icon={<CgPassword />}
 						variant='filled'
-						placeholder={LANGUAGE.register_modal_confirm_password[selectedLanguage]}
+						placeholder='Confirm password'
 						radius='md'
 						value={confirmPassword}
 						onChange={(e) => {
@@ -432,7 +409,7 @@ const Authentification = () => {
 
 					<div className='auth-footer'>
 						<div>
-							<p>{LANGUAGE.register_modal_already_have_account[selectedLanguage]}</p>
+							<p>Already have an account?</p>
 							<Button
 								size='xs'
 								variant='subtle'
@@ -453,11 +430,11 @@ const Authentification = () => {
 									setFirstNameError(false);
 									setLastNameError(false);
 								}}>
-								{LANGUAGE.register_modal_go_to_login[selectedLanguage]}
+								'Login here'
 							</Button>
 						</div>
 						<Button variant='gradient' gradient={{ from: 'orange', to: 'red' }} radius='xl' onClick={handleRegister}>
-							{LANGUAGE.register_modal_submit[selectedLanguage]}
+							Register
 						</Button>
 					</div>
 				</div>

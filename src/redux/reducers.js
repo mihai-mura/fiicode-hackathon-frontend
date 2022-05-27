@@ -20,17 +20,7 @@ const loggedUser = (state = null, action) => {
 	}
 };
 
-const language = (state = 'en', action) => {
-	switch (action.type) {
-		case 'setLanguage':
-			return action.payload;
-		default:
-			return state;
-	}
-};
-
 const Masterducer = combineReducers({
-	language,
 	modals,
 	loggedUser,
 });

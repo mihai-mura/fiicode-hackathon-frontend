@@ -1,8 +1,6 @@
 const ROLE = {
-	USER: 'user',
-	MODERATOR: 'moderator',
-	LOCAL_ADMIN: 'local-admin',
-	GENERAL_ADMIN: 'general-admin',
+	PARENT: 'parent',
+	CHILD: 'child',
 };
 
 export default ROLE;
