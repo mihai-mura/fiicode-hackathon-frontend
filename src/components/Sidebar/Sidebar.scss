@@ -26,6 +26,7 @@
 	}
 	.logo-name {
 		color: #2a3033;
+		font-size: 1.2rem;
 		font-weight: 400;
 		-webkit-touch-callout: none;
 		-webkit-user-select: none;
@@ -33,6 +34,11 @@
 		-moz-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
+
+		span {
+			color: orange;
+			font-weight: 700;
+		}
 	}
 	.arrow {
 		cursor: pointer;

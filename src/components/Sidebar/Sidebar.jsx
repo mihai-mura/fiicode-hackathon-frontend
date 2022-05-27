@@ -2,7 +2,8 @@ import './Sidebar.scss';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons';
-import CityQ from '../../images/CityQ.svg';
+import Logo from '../../images/trackme-logo.svg';
+import LogoText from '../../images/trackme-black.svg';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeModalState } from '../../redux/actions';
@@ -25,9 +26,13 @@ const Sidebar = () => {
 		<motion.div animate={{ width: isOpen ? '230px' : '90px' }} className='sidebar'>
 			<div className='sidebar-top-section'>
 				<NavLink to='/'>
-					<img src={CityQ} alt='logo' to='/' />
+					<img src={Logo} alt='logo' to='/' />
 				</NavLink>
-				{isOpen && <h3 className='logo-name'>cityq</h3>}
+				{isOpen && (
+					<p className='logo-name'>
+						track<span>me</span>
+					</p>
+				)}
 
 				{isOpen ? (
 					<div className='arrow'>

@@ -1,6 +1,6 @@
 import React from 'react';
 import './Navbar.scss';
-import CityQLogo from '../../images/CityQ.svg';
+import Logo from '../../images/trackme-black.png';
 import MobileHamburger from '../../images/mobile-hamburger.svg';
 import { useState } from 'react';
 import { Button } from '@mantine/core';
@@ -37,7 +37,7 @@ const Navbar = ({ toggleMobileMenu }) => {
 			<div className='fixed-content'>{loggedUser ? userLoggedIcons : userNotLoggedIcons}</div>
 			<div className='mobile-navigation'>
 				<img src={MobileHamburger} onClick={toggleMobileMenu} className='mobile-hamburger' alt='Mobile Hamburger' />
-				<img src={CityQLogo} className='cityq-logo' alt='CityQLogo' />
+				<img src={Logo} className='navbar-logo' alt='logo' />
 			</div>
 		</div>
 	);
