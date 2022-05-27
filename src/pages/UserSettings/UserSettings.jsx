@@ -161,7 +161,7 @@ const UserSettings = (props) => {
 					</div>
 
 					<div className='footer'>
-						<Button radius='xl' onClick={handleSave}>
+						<Button variant='gradient' gradient={{ from: 'orange', to: 'red' }} radius='xl' onClick={handleSave}>
 							Save
 						</Button>
 					</div>

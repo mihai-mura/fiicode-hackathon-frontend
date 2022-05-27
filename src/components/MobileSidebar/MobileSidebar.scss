@@ -1,0 +1,90 @@
+.userLogged-top {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+.user-menu-link {
+	font-size: 0.9rem;
+	margin-left: 5px;
+	margin-top: 5px;
+}
+.top-section {
+	margin-bottom: 1.5rem;
+}
+.mobilesidebar-container {
+	width: 210px;
+	box-shadow: rgba(149, 157, 165, 0.1) 0px 8px 24px;
+	background-color: #fdfdfd;
+	height: 100vh;
+	padding: 2.5rem 1.5rem;
+	position: absolute;
+	z-index: 6;
+	transition: 0.3s ease-in-out;
+	.mobilesidebar-button {
+		margin-top: 20px;
+		color: white;
+		cursor: pointer;
+		background-color: blue;
+	}
+	.mobile-arrow {
+		cursor: pointer;
+		font-size: 1.4rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #2a3033;
+		position: absolute;
+		right: -14px;
+		box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+		background-color: #fdfdfd;
+		border-radius: 50%;
+		width: 30px;
+		height: 30px;
+	}
+
+	.user-icon {
+		width: 30px;
+		height: 30px;
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+	.user-profilePic {
+		border-radius: 50%;
+		width: 36px;
+		height: 36px;
+	}
+	.language-switch {
+		width: fit-content;
+		height: fit-content;
+		font-size: 1.1rem;
+		cursor: pointer;
+		span {
+			transition: all 0.5s;
+		}
+	}
+}
+
+.buttons-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	.log-in-button {
+		border-radius: 15px;
+	}
+}
+
+.content-mobilesidebar {
+	height: 90%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	.log-out-button {
+		margin-top: 10px;
+		cursor: pointer;
+		color: #8a8a8a;
+	}
+}

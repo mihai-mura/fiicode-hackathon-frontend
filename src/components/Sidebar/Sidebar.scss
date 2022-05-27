@@ -1,0 +1,84 @@
+.sidebar {
+	box-shadow: rgba(149, 157, 165, 0.1) 0px 8px 24px;
+	background-color: #fdfdfd;
+	color: white;
+	height: 100vh;
+	padding: 2.5rem 1.5rem;
+	position: relative;
+	z-index: 6;
+	// border-right: 2px solid #e7e9eb;
+	display: none !important;
+	@media only screen and (min-width: 1000px) {
+		display: block !important;
+	}
+}
+// LOGO AND ARROW DESIGN
+.sidebar-top-section {
+	margin-left: 2px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 2rem;
+	gap: 10px;
+	img {
+		margin-top: 5px;
+		width: 40px;
+		cursor: pointer;
+	}
+	.logo-name {
+		color: #2a3033;
+		font-weight: 400;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+	.arrow {
+		cursor: pointer;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #2a3033;
+		position: absolute;
+		right: -14px;
+		box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+		background-color: #fdfdfd;
+		border-radius: 50%;
+		width: 30px;
+		height: 30px;
+		display: none;
+
+		@media only screen and (min-width: 600px) {
+			display: inherit;
+		}
+	}
+}
+
+.sidebar-link {
+	height: 55px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: #949699;
+	width: 100%;
+	padding: 7px 10px;
+	border-radius: 10px;
+}
+.sidebar-icon {
+	width: 25px;
+	height: 25px;
+	font-size: 1.5rem;
+	margin-bottom: 7px;
+}
+
+.sidebar-link-text {
+	margin-top: -3px;
+}
+
+.sidebar-link:hover {
+	background-color: #efefef;
+	color: #2a3033;
+	transition: all 0.2s;
+}
