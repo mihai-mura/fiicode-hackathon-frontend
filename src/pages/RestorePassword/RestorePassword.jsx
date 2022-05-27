@@ -110,7 +110,7 @@ const RestorePassword = () => {
 				}}
 				error={confirmPasswordError}
 			/>
-			<Button radius='md' size='md' onClick={handleSubmit}>
+			<Button variant='gradient' gradient={{ from: 'orange', to: 'red' }} radius='md' size='md' onClick={handleSubmit}>
 				Submit
 			</Button>
 		</Paper>

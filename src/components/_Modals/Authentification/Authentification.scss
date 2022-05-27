@@ -3,6 +3,19 @@
 	width: 100%;
 }
 
+.auth-header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.register-child {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .auth-footer {
 	display: flex;
 	justify-content: space-between;

@@ -1,5 +1,5 @@
 import './Authentification.scss';
-import { Modal, TextInput, Button, PasswordInput, LoadingOverlay, NativeSelect } from '@mantine/core';
+import { Modal, TextInput, Button, PasswordInput, LoadingOverlay, NativeSelect, SegmentedControl } from '@mantine/core';
 import { MdAlternateEmail } from 'react-icons/md';
 import { CgRename, CgPassword } from 'react-icons/cg';
 import { FaRegAddressCard } from 'react-icons/fa';
@@ -13,6 +13,9 @@ import ROLE from '../../../utils/roles';
 const Authentification = () => {
 	const dispatch = useDispatch();
 	const modals = useSelector((state) => state.modals);
+
+	//register types
+	const [registerType, setRegisterType] = useState('parent');
 
 	//inputs
 	const [firstName, setFirstName] = useState('');
@@ -245,6 +248,121 @@ const Authentification = () => {
 		}
 	};
 
+	const registerParent = (
+		<div style={{ width: '100%', position: 'relative' }}>
+			<LoadingOverlay visible={loadingOverlay} />
+			<div className='register-field-row'>
+				<TextInput
+					className='auth-input'
+					icon={<CgRename />}
+					variant='filled'
+					placeholder='First name'
+					radius='md'
+					value={firstName}
+					onChange={(e) => {
+						setFirstName(e.target.value);
+						setFirstNameError(false);
+					}}
+					error={firstNameError}
+				/>
+				<TextInput
+					className='auth-input'
+					icon={<CgRename />}
+					variant='filled'
+					placeholder='Last name'
+					radius='md'
+					value={lastName}
+					onChange={(e) => {
+						setLastName(e.target.value);
+						setLastNameError(false);
+					}}
+					error={lastNameError}
+				/>
+			</div>
+			<div className='register-field-row'>
+				<TextInput
+					className='auth-input'
+					icon={<MdAlternateEmail />}
+					variant='filled'
+					placeholder='Email'
+					radius='md'
+					type={'email'}
+					value={registerEmail}
+					onChange={(e) => {
+						setRegisterEmail(e.target.value);
+						setRegisterEmailError(false);
+					}}
+					error={registerEmailError}
+				/>
+			</div>
+			<PasswordInput
+				className='auth-input'
+				icon={<CgPassword />}
+				variant='filled'
+				placeholder='Your password'
+				description='Password must be at least 8 characters long'
+				radius='md'
+				value={registerPassword}
+				onChange={(e) => {
+					setRegisterPassword(e.target.value);
+					setRegisterPasswordError(false);
+				}}
+				error={registerPasswordError}
+			/>
+			<PasswordInput
+				className='auth-input'
+				icon={<CgPassword />}
+				variant='filled'
+				placeholder='Confirm password'
+				radius='md'
+				value={confirmPassword}
+				onChange={(e) => {
+					setConfirmPassword(e.target.value);
+					setConfirmPasswordError(false);
+				}}
+				error={confirmPasswordError}
+			/>
+
+			<div className='auth-footer'>
+				<div>
+					<p>Already have an account?</p>
+					<Button
+						size='xs'
+						variant='subtle'
+						color='orange'
+						radius='lg'
+						compact
+						onClick={() => {
+							dispatch(changeModalState('login', true));
+							dispatch(changeModalState('register', false));
+							setFirstName('');
+							setLastName('');
+							setRegisterEmail('');
+							setRegisterPassword('');
+							setConfirmPassword('');
+							setRegisterEmailError(false);
+							setRegisterPasswordError(false);
+							setConfirmPasswordError(false);
+							setFirstNameError(false);
+							setLastNameError(false);
+						}}>
+						Login here
+					</Button>
+				</div>
+				<Button variant='gradient' gradient={{ from: 'orange', to: 'red' }} radius='xl' onClick={handleRegister}>
+					Register
+				</Button>
+			</div>
+		</div>
+	);
+
+	const registerChild = (
+		<div className='register-child'>
+			{/* //! */}
+			<a href='#'>link to child app</a>
+		</div>
+	);
+
 	return (
 		<>
 			<Modal
@@ -333,111 +451,19 @@ const Authentification = () => {
 					setLastNameError(false);
 				}}
 				title='Register'>
-				<div style={{ width: '100%', position: 'relative' }}>
-					<LoadingOverlay visible={loadingOverlay} />
-					<div className='register-field-row'>
-						<TextInput
-							className='auth-input'
-							icon={<CgRename />}
-							variant='filled'
-							placeholder='First name'
-							radius='md'
-							value={firstName}
-							onChange={(e) => {
-								setFirstName(e.target.value);
-								setFirstNameError(false);
-							}}
-							error={firstNameError}
-						/>
-						<TextInput
-							className='auth-input'
-							icon={<CgRename />}
-							variant='filled'
-							placeholder='Last name'
-							radius='md'
-							value={lastName}
-							onChange={(e) => {
-								setLastName(e.target.value);
-								setLastNameError(false);
-							}}
-							error={lastNameError}
-						/>
-					</div>
-					<div className='register-field-row'>
-						<TextInput
-							className='auth-input'
-							icon={<MdAlternateEmail />}
-							variant='filled'
-							placeholder='Email'
-							radius='md'
-							type={'email'}
-							value={registerEmail}
-							onChange={(e) => {
-								setRegisterEmail(e.target.value);
-								setRegisterEmailError(false);
-							}}
-							error={registerEmailError}
-						/>
-					</div>
-					<PasswordInput
-						className='auth-input'
-						icon={<CgPassword />}
-						variant='filled'
-						placeholder='Your password'
-						description='Password must be at least 8 characters long'
-						radius='md'
-						value={registerPassword}
-						onChange={(e) => {
-							setRegisterPassword(e.target.value);
-							setRegisterPasswordError(false);
-						}}
-						error={registerPasswordError}
+				<div className='auth-header'>
+					<SegmentedControl
+						radius='xl'
+						value={registerType}
+						onChange={setRegisterType}
+						data={[
+							{ label: 'Parent', value: 'parent' },
+							{ label: 'Child', value: 'child' },
+						]}
 					/>
-					<PasswordInput
-						className='auth-input'
-						icon={<CgPassword />}
-						variant='filled'
-						placeholder='Confirm password'
-						radius='md'
-						value={confirmPassword}
-						onChange={(e) => {
-							setConfirmPassword(e.target.value);
-							setConfirmPasswordError(false);
-						}}
-						error={confirmPasswordError}
-					/>
-
-					<div className='auth-footer'>
-						<div>
-							<p>Already have an account?</p>
-							<Button
-								size='xs'
-								variant='subtle'
-								color='orange'
-								radius='lg'
-								compact
-								onClick={() => {
-									dispatch(changeModalState('login', true));
-									dispatch(changeModalState('register', false));
-									setFirstName('');
-									setLastName('');
-									setRegisterEmail('');
-									setRegisterPassword('');
-									setConfirmPassword('');
-									setRegisterEmailError(false);
-									setRegisterPasswordError(false);
-									setConfirmPasswordError(false);
-									setFirstNameError(false);
-									setLastNameError(false);
-								}}>
-								Login here
-							</Button>
-						</div>
-						<Button variant='gradient' gradient={{ from: 'orange', to: 'red' }} radius='xl' onClick={handleRegister}>
-							Register
-						</Button>
-					</div>
 				</div>
+				{registerType === 'parent' && registerParent}
+				{registerType === 'child' && registerChild}
 			</Modal>
 		</>
 	);

@@ -5,10 +5,12 @@ import MobileHamburger from '../../images/mobile-hamburger.svg';
 import { useState } from 'react';
 import { Button } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeModalState } from '../../redux/actions';
+import { changeModalState, setLoggedUser } from '../../redux/actions';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ toggleMobileMenu }) => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const loggedUser = useSelector((state) => state.loggedUser);
 
 	const userNotLoggedIcons = (
@@ -30,7 +32,24 @@ const Navbar = ({ toggleMobileMenu }) => {
 		</>
 	);
 
-	const userLoggedIcons = <div>Esti smecher</div>;
+	const userLoggedIcons = (
+		<>
+			<p>
+				{loggedUser?.firstName} {loggedUser?.lastName}
+			</p>
+			<Button
+				onClick={() => {
+					dispatch(setLoggedUser(null));
+					localStorage.removeItem('api-token');
+					navigate('/');
+				}}
+				radius='xl'
+				variant='gradient'
+				gradient={{ from: 'orange', to: 'red' }}>
+				Logout
+			</Button>
+		</>
+	);
 
 	return (
 		<div className='navbar'>
