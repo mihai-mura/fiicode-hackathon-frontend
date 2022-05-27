@@ -16,6 +16,8 @@ import { showNotification } from '@mantine/notifications';
 import { errorNotification } from './components/Notifications/Notifications';
 import { LoadingOverlay } from '@mantine/core';
 import socket from './services/socketio';
+import AllowAccess from './pages/AllowAccess/AllowAccess';
+import CreateUserModal from './components/_Modals/CreateUserModal/CreateUserModal';
 
 const App = () => {
 	const [mobileSidebarOpen, setmobileSidebarOpen] = useState(false);
@@ -54,6 +56,7 @@ const App = () => {
 				{/* modals */}
 				<Authentification />
 				<AddChildModal />
+				<CreateUserModal />
 
 				<Sidebar />
 				<MobileSidebar
@@ -65,6 +68,14 @@ const App = () => {
 					<Routes>
 						<Route path='/recover-password/:token' element={<RestorePassword />} />
 						<Route path='/' element={<Main />} />
+						<Route
+							path='/allow-access'
+							element={
+								<RouteHandler logged>
+									<AllowAccess />
+								</RouteHandler>
+							}
+						/>
 						<Route
 							path='/family'
 							element={

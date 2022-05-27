@@ -1,12 +1,29 @@
 import { Button } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import ChildrenCard from '../../components/ChildrenCard/ChildrenCard';
+import ChildCard from '../../components/ChildCard/ChildCard';
 import { changeModalState } from '../../redux/actions';
+import { errorNotification } from '../../components/Notifications/Notifications';
 import './Family.scss';
 
 const Family = () => {
 	const dispatch = useDispatch();
-	const childrens = ['Tente', 'Gabor', 'Vivi'];
+	const [children, setChildren] = useState([]);
+
+	useEffect(() => {
+		(async () => {
+			const res = await fetch(`${process.env.REACT_APP_API_URL}/children/all`, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('api-token')}`,
+				},
+			});
+			if (res.status === 200) {
+				const response = await res.json();
+				setChildren(response);
+			} else showNotification(errorNotification());
+		})();
+	}, []);
 
 	return (
 		<div className='page page-family'>
@@ -20,8 +37,11 @@ const Family = () => {
 				</Button>
 			</div>
 			<div className='children-container'>
-				{childrens.map((children) => (
-					<ChildrenCard children={children}></ChildrenCard>
+				{children.map((child) => (
+					<ChildCard
+						_id={child._id}
+						deleteCard={() => setChildren((prev) => prev.filter((u) => u._id !== child._id))}
+						name={child.name}></ChildCard>
 				))}
 			</div>
 		</div>

@@ -4,9 +4,12 @@ import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps
 import { formatRelative } from 'date-fns';
 import './Main.scss';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
-import { Combobox, ComboboxPopover, ComboboxList, ComboboxOption, ComboboxInput, ComboboxButton } from '@reach/combobox';
+import { Combobox, ComboboxPopover, ComboboxList, ComboboxOption, ComboboxInput } from '@reach/combobox';
 import '@reach/combobox/styles.css';
 import socket from '../../services/socketio';
+import ChildPin from '../../images/child-pin.png';
+import { showNotification } from '@mantine/notifications';
+import { errorNotification } from '../../components/Notifications/Notifications';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -26,9 +29,9 @@ export default function Main() {
 
 	const [mapCenter, setMapCenter] = useState({ lat: 47.17, lng: 27.57 });
 	const [markers, setMarkers] = useState([]);
+	const [childrenMarkers, setChildrenMarkers] = useState([]);
 	const [selected, setSelected] = useState(null);
-
-	const [children, setChildren] = useState([]);
+	const [childSelected, setChildSelected] = useState(null);
 
 	useEffect(() => {
 		navigator.geolocation.getCurrentPosition(function (position) {
@@ -39,7 +42,7 @@ export default function Main() {
 		});
 
 		socket.on('location', (data) => {
-			setChildren((prev) => {
+			setChildrenMarkers((prev) => {
 				const newArray = prev.filter((value) => value.child !== data.child);
 				return [...newArray, data];
 			});
@@ -50,9 +53,27 @@ export default function Main() {
 		};
 	}, []);
 
+	//get children location
 	useEffect(() => {
-		//!  set children points
-	}, [children]);
+		(async () => {
+			const res = await fetch(`${process.env.REACT_APP_API_URL}/children/all`, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('api-token')}`,
+				},
+			});
+			if (res.status === 200) {
+				const response = await res.json();
+				setChildrenMarkers(
+					response.map((child) => ({
+						name: child.name,
+						lat: child.location.lat,
+						lng: child.location.lng,
+						child: child._id,
+					}))
+				);
+			} else showNotification(errorNotification());
+		})();
+	}, []);
 
 	const onMapClick = useCallback((event) => {
 		setMarkers((current) => [
@@ -113,6 +134,31 @@ export default function Main() {
 								<h2>Marked Area</h2>
 								<p>Placed {formatRelative(selected.time, new Date())}</p>
 								<button>delete</button>
+							</div>
+						</InfoWindow>
+					) : null}
+
+					{/* children markers */}
+					{childrenMarkers.map((marker, index) => (
+						<Marker
+							key={index}
+							// label={marker.name}
+							icon={ChildPin}
+							position={{ lat: marker.lat, lng: marker.lng }}
+							onClick={() => {
+								setChildSelected(marker);
+							}}
+						/>
+					))}
+
+					{childSelected ? (
+						<InfoWindow
+							position={{ lat: childSelected.lat, lng: childSelected.lng }}
+							onCloseClick={() => {
+								setChildSelected(null);
+							}}>
+							<div>
+								<h2>{childSelected.name}</h2>
 							</div>
 						</InfoWindow>
 					) : null}

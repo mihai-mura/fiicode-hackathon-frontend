@@ -1,4 +1,4 @@
-import { IconBrandSafari, IconSettings } from '@tabler/icons';
+import { IconBrandSafari, IconSettings, IconUserPlus } from '@tabler/icons';
 import { MdOutlineFamilyRestroom } from 'react-icons/md';
 import ROLE from './roles';
 
@@ -15,6 +15,11 @@ const getRoutes = (role) => {
 					path: '/family',
 					name: 'Family',
 					icon: <MdOutlineFamilyRestroom />,
+				},
+				{
+					path: '/allow-access',
+					name: 'Allow Access',
+					icon: <IconUserPlus />,
 				},
 				{
 					path: '/settings',
