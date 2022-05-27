@@ -8,6 +8,7 @@ import MobileSidebar from './components/MobileSidebar/MobileSidebar';
 import UserSettings from './pages/UserSettings/UserSettings';
 import RestorePassword from './pages/RestorePassword/RestorePassword';
 import RouteHandler from './pages/_RouteHandler/RouteHandler';
+import Family from './pages/Family/Family';
 
 const App = () => {
 	const [mobileSidebarOpen, setmobileSidebarOpen] = useState(false);
@@ -28,6 +29,14 @@ const App = () => {
 					<Routes>
 						<Route path='/recover-password/:token' element={<RestorePassword />} />
 						<Route path='/' element={<Main />} />
+						<Route
+							path='/family'
+							element={
+								<RouteHandler logged>
+									<Family />
+								</RouteHandler>
+							}
+						/>
 						<Route
 							path='/settings'
 							element={

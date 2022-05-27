@@ -99,7 +99,7 @@ const UserSettings = (props) => {
 	};
 
 	return (
-		<div className='settings-page'>
+		<div className='page settings-page'>
 			<div className='settings-top-container'>
 				<div className='settings-top'>
 					<h3 className='settings-head'>Settings</h3>
