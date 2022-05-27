@@ -30,6 +30,8 @@ const AddChildModal = () => {
 					name: firstName,
 				});
 				dispatch(changeModalState('addChild', false));
+				setFirstName('');
+				setPage(1);
 			}
 		})();
 	}, [firstName, loggedUser, qrData]);
