@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState, useRef, useCallback } from 'react';
 import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { formatRelative } from 'date-fns';
@@ -6,15 +6,12 @@ import './Main.scss';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 import { Combobox, ComboboxPopover, ComboboxList, ComboboxOption, ComboboxInput, ComboboxButton } from '@reach/combobox';
 import '@reach/combobox/styles.css';
+import socket from '../../services/socketio';
 
 const libraries = ['places'];
 const mapContainerStyle = {
 	width: '100%',
 	height: '100%',
-};
-const center = {
-	lat: 47.17,
-	lng: 27.57,
 };
 
 const options = {
@@ -27,8 +24,35 @@ export default function Main() {
 		libraries,
 	});
 
-	const [markers, setMarkers] = useState([]); // incepem cu empty array
+	const [mapCenter, setMapCenter] = useState({ lat: 47.17, lng: 27.57 });
+	const [markers, setMarkers] = useState([]);
 	const [selected, setSelected] = useState(null);
+
+	const [children, setChildren] = useState([]);
+
+	useEffect(() => {
+		navigator.geolocation.getCurrentPosition(function (position) {
+			setMapCenter({
+				lat: position.coords.latitude,
+				lng: position.coords.longitude,
+			});
+		});
+
+		socket.on('location', (data) => {
+			setChildren((prev) => {
+				const newArray = prev.filter((value) => value.child !== data.child);
+				return [...newArray, data];
+			});
+		});
+
+		return () => {
+			socket.off('location');
+		};
+	}, []);
+
+	useEffect(() => {
+		//!  set children points
+	}, [children]);
 
 	const onMapClick = useCallback((event) => {
 		setMarkers((current) => [
@@ -62,7 +86,7 @@ export default function Main() {
 				<GoogleMap
 					mapContainerStyle={mapContainerStyle}
 					zoom={12}
-					center={center}
+					center={mapCenter}
 					options={options}
 					onLoad={onMapLoad}
 					onClick={onMapClick}>

@@ -15,6 +15,7 @@ import { setLoggedUser } from './redux/actions';
 import { showNotification } from '@mantine/notifications';
 import { errorNotification } from './components/Notifications/Notifications';
 import { LoadingOverlay } from '@mantine/core';
+import socket from './services/socketio';
 
 const App = () => {
 	const [mobileSidebarOpen, setmobileSidebarOpen] = useState(false);
@@ -38,6 +39,7 @@ const App = () => {
 				if (res.status === 200) {
 					dispatch(setLoggedUser(user));
 					setLoadingOverlay(false);
+					socket.emit('parent-id', user._id);
 				} else {
 					showNotification(errorNotification());
 				}
