@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeModalState } from '../../../redux/actions';
 import './AddChildModal.scss';
 import socket from '../../../services/socketio';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 const AddChildModal = () => {
 	const dispatch = useDispatch();
@@ -93,7 +94,10 @@ const AddChildModal = () => {
 				setPage(1);
 			}}
 			title='Add Child'>
-			{addChildModal && (page === 1 ? page1 : page2)}
+			<MobileView>{addChildModal && (page === 1 ? page1 : page2)}</MobileView>
+			<BrowserView>
+				<h4>Please open the app on your mobile device.</h4>
+			</BrowserView>
 		</Modal>
 	);
 };

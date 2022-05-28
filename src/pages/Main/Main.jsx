@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState, useRef, useCallback } from 'react';
-import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, InfoWindow, Circle } from '@react-google-maps/api';
 import { formatRelative } from 'date-fns';
 import './Main.scss';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
@@ -112,16 +112,24 @@ export default function Main() {
 					onLoad={onMapLoad}
 					onClick={onMapClick}>
 					{markers.map((marker) => (
-						<Marker
-							key={marker.time.toISOString()}
-							position={{ lat: marker.lat, lng: marker.lng }}
-							onRightClick={() =>
-								setMarkers((prev) => prev.filter((value) => value.lat !== marker.lat && value.lng !== marker.lng))
-							}
-							onClick={() => {
-								setSelected(marker);
-							}}
-						/>
+						<>
+							<Marker
+								key={marker.time.toISOString()}
+								position={{ lat: marker.lat, lng: marker.lng }}
+								onRightClick={() =>
+									setMarkers((prev) => prev.filter((value) => value.lat !== marker.lat && value.lng !== marker.lng))
+								}
+								onClick={() => {
+									setSelected(marker);
+								}}
+							/>
+							{/* <Circle
+								onRightClick={() =>
+									setMarkers((prev) => prev.filter((value) => value.lat !== marker.lat && value.lng !== marker.lng))
+								}
+								center={{ lat: marker.lat, lng: marker.lng }}
+								radius={8000}></Circle> */}
+						</>
 					))}
 
 					{selected ? (
@@ -133,7 +141,7 @@ export default function Main() {
 							<div>
 								<h2>Marked Area</h2>
 								<p>Placed {formatRelative(selected.time, new Date())}</p>
-								<button>delete</button>
+								{/* <button>delete</button> */}
 							</div>
 						</InfoWindow>
 					) : null}
