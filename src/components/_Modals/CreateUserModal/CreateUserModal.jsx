@@ -11,6 +11,7 @@ import { errorNotification, infoNotification } from '../../Notifications/Notific
 const CreateUserModal = () => {
 	const dispatch = useDispatch();
 	const CreateUserModal = useSelector((state) => state.modals.createUser);
+	const loggedUser = useSelector((store) => store.loggedUser);
 
 	//inputs
 	const [firstName, setFirstName] = useState('');
@@ -71,8 +72,7 @@ const CreateUserModal = () => {
 		) {
 			//togle overlay
 			setLoadingOverlay(true);
-			//!  api
-			const res = await fetch(`${process.env.REACT_APP_API_URL}/local-admins`, {
+			const res = await fetch(`${process.env.REACT_APP_API_URL}/users/member/register`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -83,10 +83,11 @@ const CreateUserModal = () => {
 					lastName,
 					email,
 					password,
+					parent: loggedUser._id,
 				}),
 			});
 			if (res.status === 201) {
-				dispatch(changeModalState('createAdmin', false));
+				dispatch(changeModalState('createUser', false));
 				setLoadingOverlay(false);
 				setFirstName('');
 				setLastName('');

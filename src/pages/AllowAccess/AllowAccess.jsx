@@ -1,6 +1,6 @@
 import { Button, LoadingOverlay } from '@mantine/core';
 import { IconPlus } from '@tabler/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { changeModalState } from '../../redux/actions';
 import './AllowAccess.scss';
@@ -11,7 +11,17 @@ const AllowAccess = () => {
 	const [loadingOverlay, setLoadingOverlay] = useState(false);
 	const [users, setUsers] = useState([]);
 
-	//! get users
+	useEffect(() => {
+		(async () => {
+			const res = await fetch(`${process.env.REACT_APP_API_URL}/users/members`, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('api-token')}`,
+				},
+			});
+			const response = await res.json();
+			setUsers(response);
+		})();
+	}, []);
 
 	return (
 		<div className='page page-allow-access'>
@@ -40,7 +50,7 @@ const AllowAccess = () => {
 			</div>
 			<div className='page-manage-users-body'>
 				{users.map((user, index) => (
-					<UserCard key={index} email={user.email} name={`${user.firstName} ${user.lastName}`} />
+					<UserCard _id={user._id} key={index} email={user.email} name={`${user.first_name} ${user.last_name}`} />
 				))}
 			</div>
 		</div>

@@ -27,6 +27,19 @@ const getRoutes = (role) => {
 					icon: <IconSettings />,
 				},
 			];
+		case ROLE.MEMBER:
+			return [
+				{
+					path: '/',
+					name: 'Home',
+					icon: <IconBrandSafari />,
+				},
+				{
+					path: '/settings',
+					name: 'Settings',
+					icon: <IconSettings />,
+				},
+			];
 		default:
 			return [
 				{
@@ -38,6 +51,11 @@ const getRoutes = (role) => {
 					path: '/family',
 					name: 'Family',
 					icon: <MdOutlineFamilyRestroom />,
+				},
+				{
+					path: '/allow-access',
+					name: 'Allow Access',
+					icon: <IconUserPlus />,
 				},
 				{
 					path: '/settings',

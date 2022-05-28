@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@mantine/core": "^4.2.6",
+    "@mantine/modals": "^4.2.6",
     "@mantine/notifications": "^4.2.6",
     "@reach/combobox": "^0.17.0",
     "@react-google-maps/api": "^2.11.8",

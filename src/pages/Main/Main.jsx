@@ -10,6 +10,8 @@ import socket from '../../services/socketio';
 import ChildPin from '../../images/child-pin.png';
 import { showNotification } from '@mantine/notifications';
 import { errorNotification } from '../../components/Notifications/Notifications';
+import { useSelector } from 'react-redux';
+import ROLE from '../../utils/roles';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -26,6 +28,8 @@ export default function Main() {
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
 		libraries,
 	});
+
+	const loggedUser = useSelector((store) => store.loggedUser);
 
 	const [mapCenter, setMapCenter] = useState({ lat: 47.17, lng: 27.57 });
 	const [markers, setMarkers] = useState([]);
@@ -53,27 +57,50 @@ export default function Main() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (!loggedUser) setChildrenMarkers([]);
+	}, [loggedUser]);
+
 	//get children location
 	useEffect(() => {
 		(async () => {
-			const res = await fetch(`${process.env.REACT_APP_API_URL}/children/all`, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('api-token')}`,
-				},
-			});
-			if (res.status === 200) {
-				const response = await res.json();
-				setChildrenMarkers(
-					response.map((child) => ({
-						name: child.name,
-						lat: child.location.lat,
-						lng: child.location.lng,
-						child: child._id,
-					}))
-				);
-			} else showNotification(errorNotification());
+			if (loggedUser?.role === ROLE.MEMBER) {
+				const res = await fetch(`${process.env.REACT_APP_API_URL}/children/member/all`, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('api-token')}`,
+					},
+				});
+				if (res.status === 200) {
+					const response = await res.json();
+					setChildrenMarkers(
+						response.map((child) => ({
+							name: child.name,
+							lat: child.location.lat,
+							lng: child.location.lng,
+							child: child._id,
+						}))
+					);
+				} else showNotification(errorNotification());
+			} else if (loggedUser?.role === ROLE.PARENT) {
+				const res = await fetch(`${process.env.REACT_APP_API_URL}/children/all`, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem('api-token')}`,
+					},
+				});
+				if (res.status === 200) {
+					const response = await res.json();
+					setChildrenMarkers(
+						response.map((child) => ({
+							name: child.name,
+							lat: child.location.lat,
+							lng: child.location.lng,
+							child: child._id,
+						}))
+					);
+				} else showNotification(errorNotification());
+			}
 		})();
-	}, []);
+	}, [loggedUser]);
 
 	const onMapClick = useCallback((event) => {
 		setMarkers((current) => [
