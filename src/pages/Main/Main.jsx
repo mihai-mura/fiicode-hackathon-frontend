@@ -144,7 +144,9 @@ export default function Main() {
 								key={marker.time.toISOString()}
 								position={{ lat: marker.lat, lng: marker.lng }}
 								onRightClick={() =>
-									setMarkers((prev) => prev.filter((value) => value.lat !== marker.lat && value.lng !== marker.lng))
+									setMarkers((prev) =>
+										prev.filter((value) => value.lat !== marker.lat && value.lng !== marker.lng)
+									)
 								}
 								onClick={() => {
 									setSelected(marker);
@@ -168,7 +170,7 @@ export default function Main() {
 							<div>
 								<h2>Marked Area</h2>
 								<p>Placed {formatRelative(selected.time, new Date())}</p>
-								{/* <button>delete</button> */}
+								<div style={{ height: '20px' }}></div>
 							</div>
 						</InfoWindow>
 					) : null}
@@ -182,8 +184,7 @@ export default function Main() {
 							position={{ lat: marker.lat, lng: marker.lng }}
 							onClick={() => {
 								setChildSelected(marker);
-							}}
-						/>
+							}}></Marker>
 					))}
 
 					{childSelected ? (
@@ -194,6 +195,7 @@ export default function Main() {
 							}}>
 							<div>
 								<h2>{childSelected.name}</h2>
+								<div style={{ height: '20px' }}></div>
 							</div>
 						</InfoWindow>
 					) : null}

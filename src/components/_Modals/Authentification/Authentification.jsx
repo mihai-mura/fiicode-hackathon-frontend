@@ -358,8 +358,9 @@ const Authentification = () => {
 
 	const registerChild = (
 		<div className='register-child'>
-			{/* //! */}
-			<a href='#'>link to child app</a>
+			<a href='http://localhost:3001' target='_blank'>
+				Go to child app
+			</a>
 		</div>
 	);
 
